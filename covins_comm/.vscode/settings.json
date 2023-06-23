@@ -1,0 +1,12 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/root/rosworkspace/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/root/rosworkspace/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "cmake.sourceDirectory": "/root/rosworkspace/src/covins/covins_comm",
+    "cmake.buildDirectory": "/root/rosworkspace/build/covins_comm"
+}

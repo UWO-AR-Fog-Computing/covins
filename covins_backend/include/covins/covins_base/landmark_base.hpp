@@ -92,7 +92,7 @@ public:
     bool                        is_gba_optimized_                                       = false;
 
 protected:
-    // Position
+    // World Position
     Vector3Type                 pos_w_;
 
     // Best descriptor

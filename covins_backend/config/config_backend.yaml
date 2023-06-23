@@ -19,7 +19,7 @@ sys.trajectory_format: 'TUM' # {EUROC|TUM}
 #--------------------------------------------------------------------------------------------
 
 # maps are loaded from here (use absolute path)
-sys.map_path0: '/home/manthan/ws2/covins_ws/src/covins/covins_backend/output/map_data'
+sys.map_path0: '/root/rosworkspace/src/covins/covins_backend/output/map_data'
 
 #--------------------------------------------------------------------------------------------
 # Features
@@ -65,7 +65,7 @@ mapping.kf_culling_max_time_dist: 1.0 #s - max. allowed time distance between 2 
 # activate / deactivate place recognition
 placerec.active: 1
 
-placerec.type: 'COVINS_G' # this allows to integrate other PR algorithms. Currently, only 'COVINS' and 'COVINS_G' is supported
+placerec.type: 'COVINS' # this allows to integrate other PR algorithms. Currently, only 'COVINS' and 'COVINS_G' is supported
 
 placerec.start_after_kf: 7 # map matching skips the first x KFs after map initialization
 placerec.consecutive_loop_dist: 10 # after finding a loop, the next x KFs are not considered loop closure query

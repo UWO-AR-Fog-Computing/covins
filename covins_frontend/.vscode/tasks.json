@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build covins frontend",
+        "type": "shell",
+        "command": "catkin build -j1 -DCMAKE_BUILD_TYPE=RelWithDebInfo covins_frontend && source /root/rosworkspace/devel/setup.bash",
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      }
+    ]
+  }

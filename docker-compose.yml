@@ -3,6 +3,8 @@ version: "3.8"
 services:
   covins:
     image: rosnoetic
+    # image: uwofogcomputing/fogservice:rosnoetic-amd-d # Use this image if don't already have the ROS dev image
+    # image: ghcr.io/uwo-ar-fog-computing/rosnoetic:amd-d
     container_name: covins
     volumes:
       - .:/root/rosworkspace/src/covins
@@ -21,6 +23,12 @@ services:
       - seccomp:unconfined
       - apparmor:unconfined
     privileged: true 
+
+  map:
+    image: redis:7.2-rc2
+    container_name: map
+    ports:
+      - "8000:6379" # Redis
 
 volumes:
   build:
