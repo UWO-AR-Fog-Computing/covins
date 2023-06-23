@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  covins:
+    image: rosnoetic
+    container_name: covins
+    volumes:
+      - .:/root/rosworkspace/src/covins
+      - build:/root/rosworkspace/build
+      - log:/root/rosworkspace/logs
+      - devel:/root/rosworkspace/devel
+      - install:/root/rosworkspace/install
+    ports:
+      - "7000:22" # SSH
+      - "7001:5900" # VNC
+      - "7002:80" # HTML
+      - "7003:8000" # GDB
+    cap_add:
+      - SYS_PTRACE 
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    privileged: true 
+
+volumes:
+  build:
+  log:
+  devel:
+  install:

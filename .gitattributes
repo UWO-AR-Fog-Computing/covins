@@ -1,0 +1,4 @@
+# Line separators
+* text=auto eol=lf
+*.png binary
+*.bat eol=crlf

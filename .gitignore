@@ -43,4 +43,7 @@ compile_commands.json
 
 # Vscode
 .cache/
-.vscode/
+/.vscode/
+
+# Data
+datasets

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(ORB_SLAM3)
 
+add_compile_options(-w)
+
 find_package(catkin REQUIRED COMPONENTS
              covins_comm
              eigen_catkin
