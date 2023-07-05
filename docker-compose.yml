@@ -24,7 +24,7 @@ services:
       - apparmor:unconfined
     privileged: true 
 
-  map:
+  covins-map:
     image: redis:7.2-rc2
     container_name: map
     ports:
