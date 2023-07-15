@@ -32,6 +32,10 @@
 #include "covins_backend/placerec_be.hpp"
 #include "covins_backend/placerec_gen_be.hpp"
 
+// #include <sw/redis++/redis++.h>
+
+#include <tiledb/tiledb>
+
 namespace covins {
 
 AgentPackage::AgentPackage(size_t client_id, int newfd, VisPtr vis, ManagerPtr man) {
@@ -50,6 +54,9 @@ CovinsBackend::CovinsBackend() {
 
     //+++++ Load Vocabulary +++++
     this->LoadVocabulary();
+
+    // auto redis = sw::redis::Redis("tcp://pointcloudmap:6379");
+    tiledb::Context ctx;
 
     //+++++ Create MapManager +++++
     mapmanager_.reset(new MapManager(voc_));
