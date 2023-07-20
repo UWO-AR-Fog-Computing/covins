@@ -8,5 +8,6 @@
         "/opt/ros/noetic/lib/python3/dist-packages"
     ],
     "cmake.sourceDirectory": "/root/rosworkspace/src/covins/covins_backend",
-    "cmake.buildDirectory": "/root/rosworkspace/build/covins_backend"
+    "cmake.buildDirectory": "/root/rosworkspace/build/covins_backend",
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }

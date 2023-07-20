@@ -34,7 +34,7 @@
 
 // #include <sw/redis++/redis++.h>
 
-#include <tiledb/tiledb>
+// #include <tiledb/tiledb>
 
 namespace covins {
 
@@ -56,7 +56,7 @@ CovinsBackend::CovinsBackend() {
     this->LoadVocabulary();
 
     // auto redis = sw::redis::Redis("tcp://pointcloudmap:6379");
-    tiledb::Context ctx;
+    // tiledb::Context ctx;
 
     //+++++ Create MapManager +++++
     mapmanager_.reset(new MapManager(voc_));

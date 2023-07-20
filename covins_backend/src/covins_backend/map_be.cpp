@@ -25,12 +25,16 @@
 
 // C++
 #include <dirent.h>
+#include <string>
 
 // COVINS
 #include "covins_backend/keyframe_be.hpp"
 #include "covins_backend/landmark_be.hpp"
 #include "covins_backend/kf_database.hpp"
 #include "covins_backend/optimization_be.hpp"
+
+// #include "covins_backend/pclutil.hpp"
+#include "pcl/pclutil.hpp"
 
 namespace covins {
 
@@ -187,6 +191,11 @@ auto MapManager::InitializeMap(int map_id)->void {
 
     MapInstancePtr map(new MapInstance(map_id));
     maps_[map_id] = map;
+
+    // POINT_CLOUD_MAP
+    std::string map_name(std::to_string(map_id));
+    pcl::CreateMap(map_name);
+    //
 }
 
 auto MapManager::PerformMerge()->void {
