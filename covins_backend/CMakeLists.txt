@@ -146,10 +146,12 @@ set(TILEDB_HEADERS "/tmp/TileDB/build/dist/include")
 set(PCL_TEST_HEADER_FILES
     include/covins/pcl/pcltest.hpp
     include/covins/pcl/pclutil.hpp
+    # include/covins/covins_backend/landmark_be.hpp
 )
 set(PCL_TEST_SOURCE_FILES
     src/pcl/pcltest.cpp
     src/pcl/pclutil.cpp
+    # src/covins_backend/landmark_be.cpp
 )
 
 if (NOT BUILD_LIBRARY)
@@ -172,6 +174,7 @@ if (NOT BUILD_LIBRARY)
 
     target_include_directories(pcl_test PUBLIC ${TILEDB_HEADERS})
     target_link_libraries(pcl_test /tmp/TileDB/build/dist/lib/libtiledb.so)
+    target_compile_definitions(pcl_test PRIVATE PCL_TEST=1)
 
     cs_add_executable(pcl_test_node
         covins_sys/src/pcl_node.cpp

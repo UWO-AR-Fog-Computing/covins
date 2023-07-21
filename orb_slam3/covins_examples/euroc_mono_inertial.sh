@@ -1,5 +1,5 @@
 #!/bin/bash
-pathDatasets='/root/rosworkspace/src/covins/datasets'
+pathDatasets='/root/rosworkspace/data/datasets'
 #------------------------------------
 # Monocular-Inertial Examples
 source /root/rosworkspace/devel/setup.bash

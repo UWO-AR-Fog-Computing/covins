@@ -4,6 +4,9 @@
 
 #include <tiledb/tiledb>
 
+#include <covins/covins_base/typedefs_base.hpp>
+#include "covins_backend/landmark_be.hpp"
+
 namespace pcl {
 
 void CreateMap(std::string map_id) {
@@ -12,9 +15,9 @@ void CreateMap(std::string map_id) {
     if (tiledb::Object::object(ctx, GetMapName(map_id)).type() == tiledb::Object::Type::Array)
         return;
 
-    double max_dim = 1.7976931348623157e+308;
-    double min_dim = -1.7976931348623157e+308;
-    double dim_domain[] = {min_dim, max_dim};
+    covins::TypeDefs::precision_t max_dim = 1.7976931348623157e+308;
+    covins::TypeDefs::precision_t min_dim = -1.7976931348623157e+308;
+    covins::TypeDefs::precision_t dim_domain[] = {min_dim, max_dim};
 
     // int tile_extent = 100;
 
@@ -54,14 +57,16 @@ void CreateMap(std::string map_id) {
     // schema.set_coords_filter_list(filter_list);
 
     tiledb::Array::create(GetMapName(map_id), schema);
+
+    std::cout << "Created map " << GetMapName(map_id) << "\n";
 }
 
-void InsertMapPoint(double px, double py, double pz, size_t id, std::string map_id) {
+void InsertMapPoint(covins::TypeDefs::precision_t px, covins::TypeDefs::precision_t py, covins::TypeDefs::precision_t pz, size_t id, std::string map_id) {
     tiledb::Context ctx;
 
-    std::vector<double> vpx = {px};
-    std::vector<double> vpy = {py};
-    std::vector<double> vpz = {pz};
+    std::vector<covins::TypeDefs::precision_t> vpx = {px};
+    std::vector<covins::TypeDefs::precision_t> vpy = {py};
+    std::vector<covins::TypeDefs::precision_t> vpz = {pz};
     std::vector<int32_t> v = {1};
     std::vector<size_t> vid = {id};
 
@@ -79,6 +84,13 @@ void InsertMapPoint(double px, double py, double pz, size_t id, std::string map_
 
     map.close();
 }
+
+#ifndef PCL_TEST
+void InsertLandmark(covins::TypeDefs::LandmarkPtr lmp, size_t id, std::string map_id) {
+    auto pos = LandmarkToPos(lmp);
+    InsertMapPoint(std::get<0>(pos), std::get<1>(pos), std::get<2>(pos), id, map_id);
+}
+#endif
 
 void DeleteMapPoint(size_t id, std::string map_id) {
     tiledb::Context ctx;
@@ -102,7 +114,7 @@ void GetMapPoint(std::string map_id) {
 
     tiledb::Subarray subarray(ctx, map);
 
-    auto non_empty_domain = map.non_empty_domain<double>();
+    auto non_empty_domain = map.non_empty_domain<covins::TypeDefs::precision_t>();
     std::cout << "Non-empty domain: ";
     std::cout << "[" << non_empty_domain[0].second.first << ","
             << non_empty_domain[0].second.second << "], ["
@@ -115,10 +127,10 @@ void GetMapPoint(std::string map_id) {
 
     subarray.add_range(0, -100.0, 100.0).add_range(1, -100.0, 100.0).add_range(2, -100.0, 100.0);
 
-    std::vector<double> vx(100);
-    std::vector<double> vy(100);
-    std::vector<double> vz(100);
-    std::vector<double> vv(100);
+    std::vector<covins::TypeDefs::precision_t> vx(100);
+    std::vector<covins::TypeDefs::precision_t> vy(100);
+    std::vector<covins::TypeDefs::precision_t> vz(100);
+    std::vector<covins::TypeDefs::precision_t> vv(100);
     std::vector<size_t> vid(100);
 
     tiledb::Query query(ctx, map, TILEDB_READ);
@@ -139,11 +151,11 @@ void GetMapPoint(std::string map_id) {
     std::cout << "Result num: " << result_num << "\n";
 
     for (int r = 0; r < result_num; r++) {
-        double x = vx[r];
-        double y = vy[r];
-        double z = vz[r];
-        double v = vv[r];
-        size_t id = vid[r];
+        auto x = vx[r];
+        auto y = vy[r];
+        auto z = vz[r];
+        auto v = vv[r];
+        auto id = vid[r];
 
         std::cout << "Cell (" << x << ", " << y << ", " << z << ") has data " << v << " " << id << "\n";
     }
@@ -166,6 +178,19 @@ void GetMapSchema(std::string map_id) {
 std::string GetMapName(std::string map_id) {
     return MAP_PATH + map_id;
 }
+
+#ifndef PCL_TEST
+std::tuple<covins::TypeDefs::precision_t, covins::TypeDefs::precision_t, covins::TypeDefs::precision_t> LandmarkToPos(covins::TypeDefs::LandmarkPtr lm) {
+    // covins::TypeDefs::Vector3Type pos = *lmp;
+    covins::TypeDefs::Vector3Type pos = lm->GetWorldPos();
+
+    covins::TypeDefs::precision_t x = pos.coeff(0,0);
+    covins::TypeDefs::precision_t y = pos.coeff(1,0);
+    covins::TypeDefs::precision_t z = pos.coeff(2,0);
+
+    return std::make_tuple(x, y, z);
+}
+#endif
 
 
 }

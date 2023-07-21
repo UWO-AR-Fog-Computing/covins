@@ -194,8 +194,8 @@ auto MapManager::InitializeMap(int map_id)->void {
 
     // POINT_CLOUD_MAP
     std::string map_name(std::to_string(map_id));
-    pcl::CreateMap(map_name);
-    //
+    // pcl::CreateMap(map_name);
+    pcl::CreateMap("test_map");
 }
 
 auto MapManager::PerformMerge()->void {
@@ -408,6 +408,9 @@ auto Map::AddLandmark(covins::MapBase::LandmarkPtr lm)->void {
     std::unique_lock<std::mutex> lock(mtx_map_);
     landmarks_[lm->id_] = lm;
     max_id_lm_ = std::max(max_id_lm_,lm->id_.first);
+
+    //POINT_CLOUD
+    pcl::InsertLandmark(lm, std::get<1>(lm->id_), "test_map");
 }
 
 auto Map::AddLoopConstraint(LoopConstraint lc)->void {
