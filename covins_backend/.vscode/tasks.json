@@ -4,7 +4,7 @@
     {
       "label": "build covins backend",
       "type": "shell",
-      "command": "catkin build -j1 -DCMAKE_BUILD_TYPE=RelWithDebInfo covins_backend && source /root/rosworkspace/devel/setup.bash",
+      "command": "catkin build -j12 -DCMAKE_BUILD_TYPE=RelWithDebInfo covins_backend && source /root/rosworkspace/devel/setup.bash",
       // "command": "catkin build -j1 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_PREFIX_PATH=TileDB/dist covins_backend && source /root/rosworkspace/devel/setup.bash",
       "problemMatcher": [],
       "group": {

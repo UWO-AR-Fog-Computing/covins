@@ -155,31 +155,31 @@ set(PCL_TEST_SOURCE_FILES
 )
 
 if (NOT BUILD_LIBRARY)
-    # cs_add_library(covins_base ${BASE_SOURCE_FILES} ${BASE_HEADER_FILES})
-    # target_link_libraries(covins_base ${catkin_LIBRARIES} ${EXTERNAL_LIBRARIES})
+    cs_add_library(covins_base ${BASE_SOURCE_FILES} ${BASE_HEADER_FILES})
+    target_link_libraries(covins_base ${catkin_LIBRARIES} ${EXTERNAL_LIBRARIES})
 
-    # cs_add_library(covins_backend ${BACKEND_SOURCE_FILES} ${BACKEND_HEADER_FILES})
-    # target_include_directories(covins_backend PUBLIC ${TILEDB_HEADERS})
-    # target_link_libraries(covins_backend covins_base ${PROJECT_SOURCE_DIR}/thirdparty/DBoW2/lib/libDBoW2.so /tmp/TileDB/build/dist/lib/libtiledb.so)
+    cs_add_library(covins_backend ${BACKEND_SOURCE_FILES} ${BACKEND_HEADER_FILES})
+    target_include_directories(covins_backend PUBLIC ${TILEDB_HEADERS})
+    target_link_libraries(covins_backend covins_base ${PROJECT_SOURCE_DIR}/thirdparty/DBoW2/lib/libDBoW2.so /tmp/TileDB/build/dist/lib/libtiledb.so)
     # target_compile_definitions(covins_backend PRIVATE POINT_CLOUD_MAP=1)
 
-    # cs_add_executable(covins_backend_node
-    #     covins_sys/src/covins_backend_node.cpp
-    # )
-    # target_link_libraries(covins_backend_node covins_backend)
-
-
-    cs_add_library(pcl_test ${PCL_TEST_SOURCE_FILES} ${PCL_TEST_HEADER_FILES})
-    target_link_libraries(pcl_test ${catkin_LIBRARIES} ${EXTERNAL_LIBRARIES})
-
-    target_include_directories(pcl_test PUBLIC ${TILEDB_HEADERS})
-    target_link_libraries(pcl_test /tmp/TileDB/build/dist/lib/libtiledb.so)
-    target_compile_definitions(pcl_test PRIVATE PCL_TEST=1)
-
-    cs_add_executable(pcl_test_node
-        covins_sys/src/pcl_node.cpp
+    cs_add_executable(covins_backend_node
+        covins_sys/src/covins_backend_node.cpp
     )
-    target_link_libraries(pcl_test_node pcl_test)
+    target_link_libraries(covins_backend_node covins_backend)
+
+
+    # cs_add_library(pcl_test ${PCL_TEST_SOURCE_FILES} ${PCL_TEST_HEADER_FILES})
+    # target_link_libraries(pcl_test ${catkin_LIBRARIES} ${EXTERNAL_LIBRARIES})
+
+    # target_include_directories(pcl_test PUBLIC ${TILEDB_HEADERS})
+    # target_link_libraries(pcl_test /tmp/TileDB/build/dist/lib/libtiledb.so)
+    # target_compile_definitions(pcl_test PRIVATE PCL_TEST=1)
+
+    # cs_add_executable(pcl_test_node
+    #     covins_sys/src/pcl_node.cpp
+    # )
+    # target_link_libraries(pcl_test_node pcl_test)
 
 
     # target_link_libraries(covins_backend_node TileDB::tiledb_shared)

@@ -7,5 +7,8 @@
         "/root/rosworkspace/devel/lib/python3/dist-packages",
         "/opt/ros/noetic/lib/python3/dist-packages"
     ],
-    "cmake.sourceDirectory": "/root/rosworkspace/src/covins/covins_backend"
+    "cmake.sourceDirectory": "/root/rosworkspace/src/covins/orb_slam3",
+    "cmake.buildDirectory": "/root/rosworkspace/build/orb_slam3",
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
+    // "cmake.sourceDirectory": "/root/rosworkspace/src/covins/covins_backend"
 }

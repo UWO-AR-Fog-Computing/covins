@@ -1,30 +1,31 @@
 {
-  "configurations": [
-    {
-      "browse": {
-        "databaseFilename": "${default}",
-        "limitSymbolsToIncludedHeaders": false
-      },
-      "includePath": [
-        "/root/rosworkspace/devel/include/**",
-        "/opt/ros/noetic/include/**",
-        "/root/rosworkspace/src/aslam_cv2/aslam_cv_cameras/include/**",
-        "/root/rosworkspace/src/aslam_cv2/aslam_cv_common/include/**",
-        "/root/rosworkspace/src/covins/covins_backend/include/**",
-        "/root/rosworkspace/src/covins/covins_comm/include/**",
-        "/root/rosworkspace/src/vision_opencv/cv_bridge/include/**",
-        "/root/rosworkspace/src/eigen_checks/include/**",
-        "/root/rosworkspace/src/minkindr/minkindr/include/**",
-        "/root/rosworkspace/src/opengv/include/**",
-        "/root/rosworkspace/src/robopt_open/include/**",
-        "/usr/include/**"
-      ],
-      "name": "ROS",
-      "intelliSenseMode": "gcc-x64",
-      "compilerPath": "/usr/bin/gcc",
-      "cStandard": "gnu11",
-      "cppStandard": "c++14"
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${default}",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "/root/rosworkspace/devel/include/**",
+                "/opt/ros/noetic/include/**",
+                "/root/rosworkspace/src/aslam_cv2/aslam_cv_cameras/include/**",
+                "/root/rosworkspace/src/aslam_cv2/aslam_cv_common/include/**",
+                "/root/rosworkspace/src/covins/covins_backend/include/**",
+                "/root/rosworkspace/src/covins/covins_comm/include/**",
+                "/root/rosworkspace/src/vision_opencv/cv_bridge/include/**",
+                "/root/rosworkspace/src/eigen_checks/include/**",
+                "/root/rosworkspace/src/minkindr/minkindr/include/**",
+                "/root/rosworkspace/src/opengv/include/**",
+                "/root/rosworkspace/src/robopt_open/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++17",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
 }
