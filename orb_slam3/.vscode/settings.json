@@ -9,6 +9,6 @@
     ],
     "cmake.sourceDirectory": "/root/rosworkspace/src/covins/orb_slam3",
     "cmake.buildDirectory": "/root/rosworkspace/build/orb_slam3",
+    // "cmake.buildDirectory": "/root/rosworkspace/src/covins/orb_slam3/build",
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"
-    // "cmake.sourceDirectory": "/root/rosworkspace/src/covins/covins_backend"
 }

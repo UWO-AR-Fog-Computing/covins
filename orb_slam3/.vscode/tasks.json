@@ -1,16 +1,16 @@
 {
     "version": "2.0.0",
     "tasks": [
-      {
-        "label": "build orbslam 3 no ros",
-        "type": "shell",
-        "command": "cd /root/rosworkspace/src/covins/orb_slam3/build && cmake .. && make -j12",
-        "problemMatcher": [],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
-      },
+      // {
+      //   "label": "build orbslam 3 no ros",
+      //   "type": "shell",
+      //   "command": "cd /root/rosworkspace/src/covins/orb_slam3/build && cmake .. && make -j12",
+      //   "problemMatcher": [],
+      //   "group": {
+      //     "kind": "build",
+      //     "isDefault": true
+      //   }
+      // },
       {
         "label": "build orbslam 3 frontend",
         "type": "shell",

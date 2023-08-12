@@ -1,22 +1,37 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 2.8)
 project(orb_slam3)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_options(-w)
 
-find_package(catkin_simple REQUIRED)
-catkin_simple(ALL_DEPS_REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+covins_comm
+eigen_catkin
+opencv3_catkin
+roscpp
+std_msgs
+sensor_msgs
+definitions
+message_runtime
+)
+
+find_package(cv_bridge 1.16.2 EXACT REQUIRED)
 
 set(EIGEN_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../../../devel/include/eigen3)
 find_package(Eigen3 3.3.4 EXACT REQUIRED)
 
-# add_compile_options(-std=c++11 -pthread -pipe -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-function -Wno-vla)
-add_compile_options(-w)
+IF(NOT CMAKE_BUILD_TYPE)
+  SET(CMAKE_BUILD_TYPE Release)
+ENDIF()
+
+MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-deprecated -O3 -march=native ")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-deprecated -O3 -march=native")
 
 # Check C++11 or C++0x support
 include(CheckCXXCompilerFlag)
@@ -34,9 +49,19 @@ else()
    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
-IF(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE RelWithDebInfo)
-ENDIF()
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+
+find_package(OpenCV 3.0)
+if(NOT OpenCV_FOUND)
+  message(FATAL_ERROR "OpenCV > 3.0 not found.")
+endif()
+
+
+MESSAGE("OPENCV VERSION:")
+MESSAGE(${OpenCV_VERSION})
+
+find_package(Pangolin REQUIRED)
+find_package(realsense2)
 
 include_directories(
 ${PROJECT_SOURCE_DIR}
@@ -47,11 +72,41 @@ ${Pangolin_INCLUDE_DIRS}
 ${covins_comm_INCLUDE_DIRS}
 ${PROJECT_SOURCE_DIR}/include/comm
 ${PROJECT_SOURCE_DIR}/Thirdparty/
+${catkin_INCLUDE_DIRS}
+/opt/ros/noetic/include/cv_bridge
 )
 
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
-set(BASE_HEADER_FILES
+catkin_package(CATKIN_DEPENDS roscpp covins_comm eigen_catkin opencv3_catkin)
+
+add_library(${PROJECT_NAME} SHARED
+src/System.cc
+src/Tracking.cc
+src/LocalMapping.cc
+src/LoopClosing.cc
+src/ORBextractor.cc
+src/ORBmatcher.cc
+src/FrameDrawer.cc
+src/Converter.cc
+src/MapPoint.cc
+src/KeyFrame.cc
+src/Atlas.cc
+src/Map.cc
+src/MapDrawer.cc
+src/Optimizer.cc
+src/Frame.cc
+src/KeyFrameDatabase.cc
+src/Sim3Solver.cc
+src/Initializer.cc
+src/Viewer.cc
+src/ImuTypes.cc
+src/G2oTypes.cc
+src/CameraModels/Pinhole.cpp
+src/CameraModels/KannalaBrandt8.cpp
+src/OptimizableTypes.cpp
+src/MLPnPsolver.cpp
+src/TwoViewReconstruction.cc
 include/System.h
 include/Tracking.h
 include/LocalMapping.h
@@ -83,71 +138,58 @@ include/Config.h
 
 # Comm
 include/comm/communicator.hpp
-)
-
-set(BASE_SOURCE_FILES
-src/System.cc
-src/Tracking.cc
-src/LocalMapping.cc
-src/LoopClosing.cc
-src/ORBextractor.cc
-src/ORBmatcher.cc
-src/FrameDrawer.cc
-src/Converter.cc
-src/MapPoint.cc
-src/KeyFrame.cc
-src/Atlas.cc
-src/Map.cc
-src/MapDrawer.cc
-src/Optimizer.cc
-src/Frame.cc
-src/KeyFrameDatabase.cc
-src/Sim3Solver.cc
-src/Initializer.cc
-src/Viewer.cc
-src/ImuTypes.cc
-src/G2oTypes.cc
-src/CameraModels/Pinhole.cpp
-src/CameraModels/KannalaBrandt8.cpp
-src/OptimizableTypes.cpp
-src/MLPnPsolver.cpp
-src/TwoViewReconstruction.cc
-
-# Comm
 src/comm/communicator.cpp
 )
 
 add_subdirectory(Thirdparty/g2o)
 
-set(EXTERNAL_HEADERS
-${PROJECT_SOURCE_DIR}
-${PROJECT_SOURCE_DIR}/include
-${PROJECT_SOURCE_DIR}/include/CameraModels
-${EIGEN3_INCLUDE_DIR}
-${Pangolin_INCLUDE_DIRS}
-${covins_comm_INCLUDE_DIRS}
-${PROJECT_SOURCE_DIR}/include/comm
-${PROJECT_SOURCE_DIR}/Thirdparty/
-)
-
-set(EXTERNAL_LIBRARIES
+target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
 ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
 ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
 ${covins_comm_LIBRARIES}
+/opt/ros/noetic/lib/libcv_bridge.so
 -lboost_serialization
 -lcrypto
 )
 
-cs_add_library(orbslam3_frontend ${BASE_SOURCE_FILES} ${BASE_HEADER_FILES})
-target_link_libraries(orbslam3_frontend ${catkin_LIBRARIES} ${EXTERNAL_LIBRARIES})
-target_include_directories(orbslam3_frontend PUBLIC ${EXTERNAL_HEADERS})
 
-cs_add_executable(orbslam3_frontend_node
-    nodes/monocular_inertial_node.cpp
-)
-target_link_libraries(orbslam3_frontend_node orbslam3_frontend)
+### Build examples
 
-add_doxygen(NOT_AUTOMATIC)
+# Monocular examples
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular)
+
+#add_executable(mono_tum
+#Examples/Monocular/mono_tum.cc)
+#target_link_libraries(mono_tum ${PROJECT_NAME})
+
+#add_executable(mono_kitti
+#Examples/Monocular/mono_kitti.cc)
+#target_link_libraries(mono_kitti ${PROJECT_NAME})
+
+# add_executable(mono_euroc
+# Examples/Monocular/mono_euroc.cc)
+# target_link_libraries(mono_euroc ${PROJECT_NAME})
+
+#add_executable(mono_tum_vi
+#Examples/Monocular/mono_tum_vi.cc)
+#target_link_libraries(mono_tum_vi ${PROJECT_NAME})
+
+# Monocular-Inertial examples
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular-Inertial)
+
+# add_executable(mono_inertial_euroc
+# Examples/Monocular-Inertial/mono_inertial_euroc.cc)
+# target_link_libraries(mono_inertial_euroc ${PROJECT_NAME})
+
+#add_executable(mono_inertial_tum_vi
+#Examples/Monocular-Inertial/mono_inertial_tum_vi.cc)
+#target_link_libraries(mono_inertial_tum_vi ${PROJECT_NAME})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY /root/rosworkspace/devel/lib/orb_slam3)
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/nodes)
+add_executable(orbslam3_frontend_node
+nodes/monocular_inertial_node.cpp)
+target_link_libraries(orbslam3_frontend_node ${PROJECT_NAME} ${catkin_LIBRARIES})
